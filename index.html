@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sehatin — Interactive Prototype</title>
+<style>
+:root{--g:#19A974;--dg:#087F5B;--bg:#F6FAF8;--text:#17201D;--muted:#71827C;--line:#DCE9E4;--soft:#E5F5EE;--red:#E05252}
+*{box-sizing:border-box} body{margin:0;background:#dfe9e5;font-family:Inter,Arial,sans-serif;color:var(--text)}
+button,input{font:inherit}.app{width:min(390px,100vw);min-height:100vh;margin:auto;background:var(--bg);position:relative;overflow:hidden}
+.screen{display:none;min-height:100vh;padding:22px 24px 94px;animation:in .2s ease}.screen.active{display:block}
+@keyframes in{from{opacity:.3;transform:translateX(8px)}to{opacity:1;transform:none}}
+.status{height:24px;font-size:11px;font-weight:700;display:flex;justify-content:space-between}
+h1{font-size:22px;margin:16px 0 5px}h2{font-size:16px;margin:0 0 14px}p{margin:0;color:var(--muted);font-size:11px;line-height:1.5}
+.header{display:flex;align-items:center;gap:10px;margin:14px 0 18px}.back{border:0;background:none;font-size:28px;line-height:1;cursor:pointer}
+.card{background:white;border-radius:14px;padding:16px;box-shadow:0 5px 18px #b7d8cd44;margin:10px 0}.hero{background:linear-gradient(135deg,var(--g),var(--dg));color:#fff;border-radius:14px;padding:16px;margin:14px 0}
+.hero p{color:#fff}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.btn{border:0;background:var(--g);color:#fff;width:100%;height:44px;border-radius:10px;font-weight:700;cursor:pointer}.btn.outline{background:#fff;color:var(--dg);border:1px solid var(--g)}
+.field{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:0 14px;margin:7px 0;outline:none}.field:focus{border-color:var(--g);box-shadow:0 0 0 3px #19a97422}
+.chips{display:flex;gap:7px;overflow:auto;padding-bottom:4px}.chip{border:1px solid var(--line);background:#fff;border-radius:14px;padding:7px 11px;font-size:10px;white-space:nowrap;cursor:pointer}.chip.active{background:var(--g);color:#fff;border-color:var(--g)}
+.icon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;color:var(--dg);font-size:20px}.row{display:flex;align-items:center;gap:12px}.grow{flex:1}.small{font-size:9px;color:var(--muted)}.green{color:var(--dg)}.danger{color:var(--red)}
+.bottom{position:fixed;bottom:0;width:min(390px,100vw);height:76px;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);z-index:10}.nav{border:0;background:none;color:var(--muted);font-size:9px;cursor:pointer}.nav b{display:block;font-size:20px;margin-bottom:3px}.nav.active{color:var(--g)}
+.splash{min-height:100vh;display:grid;place-items:center;text-align:center;background:linear-gradient(#e5f5ee,#f6faf8)}.logo{width:78px;height:78px;border-radius:50%;background:#fff;display:grid;place-items:center;margin:auto;color:var(--g);font-size:34px;box-shadow:0 8px 30px #087f5b22}.splash h1{font-size:36px}.center{text-align:center}
+.result{display:none}.result.show{display:block}
+.switch{appearance:none;width:42px;height:23px;background:#cbd9d4;border-radius:20px;position:relative;cursor:pointer}.switch:checked{background:var(--g)}.switch:after{content:"";position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s}.switch:checked:after{left:22px}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(15px);background:#17201deF;color:#fff;padding:10px 14px;border-radius:10px;font-size:10px;opacity:0;pointer-events:none;transition:.25s;z-index:30;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<section class="screen active" id="splash">
+  <div class="splash"><div><div class="logo">✚</div><h1>Sehatin</h1><p>Jaga sehatmu, mulai dari sekarang.</p><button class="btn" style="margin-top:28px;width:230px" onclick="go('login')">Mulai</button></div></div>
+</section>
+
+<section class="screen" id="login">
+  <div class="status"><span>9:41</span><span>▮▮ ᯤ ▰</span></div>
+  <div class="center" style="margin:38px 0 28px"><div class="logo" style="width:64px;height:64px;font-size:27px">✚</div><h1>Sehatin</h1><p>Masuk untuk melanjutkan</p></div>
+  <input class="field" id="email" placeholder="✉  Email atau nomor HP">
+  <input class="field" id="password" type="password" placeholder="▣  Password">
+  <div class="row small" style="justify-content:space-between;margin:7px 2px 16px"><span>☐ Ingat saya</span><button class="nav" style="font-size:9px" onclick="toast('Fitur reset password siap dihubungkan')">Lupa password?</button></div>
+  <button class="btn" onclick="login()">Masuk</button>
+  <div class="center small" style="margin:18px">atau</div>
+  <button class="btn outline" onclick="login()">G  Masuk dengan Google</button>
+  <p class="center" style="margin-top:20px">Belum punya akun? <button class="nav green" onclick="toast('Form daftar dapat ditambahkan di sini')">Daftar di sini</button></p>
+</section>
+
+<section class="screen" id="home">
+  <div class="status"><span>9:41</span><span>▮▮ ᯤ ▰</span></div>
+  <h1>Halo, Alip 👋</h1><p>Semangat jaga kesehatanmu hari ini!</p>
+  <div class="hero"><b>Status Kesehatanmu</b><p>Secara umum baik</p></div>
+  <div class="statgrid">
+    <div class="card"><div class="green">♥</div><div class="small">Heart Rate</div><b>72 bpm</b></div>
+    <div class="card"><div class="green">☾</div><div class="small">Tidur</div><b>7j 30m</b></div>
+    <div class="card"><div class="green">⌁</div><div class="small">Langkah</div><b>6.482</b></div>
+  </div>
+  <h2 style="margin-top:18px">Aksi Cepat</h2>
+  <div class="grid">
+    <button class="card" onclick="go('health')" style="border:0;text-align:left"><div class="icon">♧</div><b>Cek Kesehatan</b><p>Cek kondisi tubuhmu</p></button>
+    <button class="card" onclick="go('reminder')" style="border:0;text-align:left"><div class="icon">⌕</div><b>Obat</b><p>Jadwal & pengingat</p></button>
+    <button class="card" onclick="go('consult')" style="border:0;text-align:left"><div class="icon">♙</div><b>Konsultasi</b><p>Chat dengan dokter</p></button>
+    <button class="card" onclick="go('history')" style="border:0;text-align:left"><div class="icon">▤</div><b>Catatan</b><p>Riwayat kesehatan</p></button>
+  </div>
+</section>
+
+<section class="screen" id="health">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Cek Kesehatan</h2></div>
+  <p>Isi data untuk mendapatkan penilaian kesehatan.</p>
+  <input class="field" id="age" type="number" placeholder="Umur (tahun)">
+  <input class="field" id="height" type="number" placeholder="Tinggi badan (cm)">
+  <input class="field" id="weight" type="number" placeholder="Berat badan (kg)">
+  <select class="field" id="activity"><option value="1.2">Aktivitas rendah</option><option value="1.45">Aktivitas sedang</option><option value="1.65">Aktivitas tinggi</option></select>
+  <button class="btn" onclick="healthCheck()">Lihat Hasil</button>
+  <div class="card result" id="healthResult">
+    <h2>Hasil Penilaian</h2><div class="center"><div style="font-size:32px;font-weight:800;color:var(--g)" id="score">--</div><div class="small">skor kesehatan</div></div>
+    <p id="bmiText" style="margin-top:12px"></p><p id="healthAdvice"></p>
+  </div>
+</section>
+
+<section class="screen" id="consult">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Konsultasi Dokter</h2></div>
+  <input class="field" id="searchDoctor" placeholder="⌕  Cari dokter atau spesialis..." oninput="filterDoctors()">
+  <div class="chips"><button class="chip active" onclick="filterChip(this,'')">Semua</button><button class="chip" onclick="filterChip(this,'Umum')">Umum</button><button class="chip" onclick="filterChip(this,'Kulit')">Kulit</button><button class="chip" onclick="filterChip(this,'Gizi')">Gizi</button></div>
+  <div id="doctorList"></div>
+</section>
+
+<section class="screen" id="doctor">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Detail Dokter</h2></div>
+  <div class="card"><div class="row"><div class="logo" style="width:58px;height:58px;font-size:23px">A</div><div><b id="docName">dr. Andi Pratama, Sp.PD</b><p id="docSpec">Penyakit Dalam</p><p class="green">★ 4.8 • ● Online</p></div></div></div>
+  <h2>Jadwal Praktik</h2><div class="chips" id="slots"></div><button class="btn" style="margin-top:18px" onclick="toast('Konsultasi dimulai — demo prototype')">Konsultasi Sekarang</button>
+</section>
+
+<section class="screen" id="history">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Riwayat Kesehatan</h2></div>
+  <div id="historyList"></div>
+</section>
+
+<section class="screen" id="reminder">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Pengingat Obat</h2></div>
+  <div class="card row"><div class="icon">♧</div><div class="grow"><b>Paracetamol 500mg</b><p>08:00 • Setelah makan</p></div><input class="switch" type="checkbox" checked onchange="toast(this.checked?'Pengingat aktif':'Pengingat dimatikan')"></div>
+  <button class="btn outline" onclick="addReminder()">＋ Tambah Pengingat</button>
+  <h2 style="margin-top:22px">Jadwal Hari Ini</h2><div id="meds"></div>
+</section>
+
+<section class="screen" id="profile">
+  <div class="hero center"><div class="logo" style="width:70px;height:70px">A</div><h2 style="margin-top:10px">Alip Rivan Maulana</h2><p>Mahasiswa • 19 tahun</p></div>
+  <div id="profileItems"></div>
+  <button class="btn outline danger" style="margin-top:12px" onclick="toast('Demo: kamu belum benar-benar logout')">⇥ Keluar</button>
+</section>
+
+<section class="screen" id="settings">
+  <div class="header"><button class="back" onclick="back()">‹</button><h2>Pengaturan</h2></div>
+  <div class="card row"><div class="grow"><b>Notifikasi</b><p>Pengingat kesehatan</p></div><input class="switch" type="checkbox" checked></div>
+  <div class="card row"><div class="grow"><b>Mode Terang</b><p>Tampilan aplikasi</p></div><input class="switch" type="checkbox" checked onchange="toggleDark(this)"></div>
+  <div class="card" onclick="toast('Bahasa: Indonesia')" style="cursor:pointer"><b>Bahasa</b><p>Bahasa Indonesia</p></div>
+  <div class="card" onclick="toast('Sehatin v1.0 — prototype')" style="cursor:pointer"><b>Tentang Sehatin</b><p>Informasi aplikasi</p></div>
+</section>
+
+<nav class="bottom" id="bottom">
+<button class="nav" data-go="home"><b>⌂</b>Beranda</button>
+<button class="nav" data-go="health"><b>♡</b>Kesehatan</button>
+<button class="nav" data-go="consult"><b>▣</b>Konsultasi</button>
+<button class="nav" data-go="profile"><b>♙</b>Profil</button>
+</nav>
+<div class="toast" id="toast"></div>
+</div>
+<script>
+const screens=['splash','login','home','health','consult','doctor','history','reminder','profile','settings'];
+let current='splash', historyStack=[];
+const doctors=[
+ {name:'dr. Andi Pratama, Sp.PD',spec:'Umum / Penyakit Dalam',ava:'A'},
+ {name:'dr. Siti Nurhaliza, Sp.KK',spec:'Kulit & Kelamin',ava:'S'},
+ {name:'dr. Budi Santoso, Sp.OG',spec:'Umum / Kandungan',ava:'B'},
+ {name:'dr. Rina Anggraini, Sp.GK',spec:'Gizi',ava:'R'}
+];
+function go(id){if(current!==id) historyStack.push(current); current=id;screens.forEach(x=>document.getElementById(x).classList.toggle('active',x===id));document.getElementById('bottom').style.display=['splash','login','doctor','settings'].includes(id)?'none':'grid';document.querySelectorAll('.nav[data-go]').forEach(n=>n.classList.toggle('active',n.dataset.go===id));if(id==='consult')renderDoctors();if(id==='history')renderHistory();if(id==='reminder')renderMeds()}
+function back(){go(historyStack.pop()||'home')}
+function toast(msg){const e=document.getElementById('toast');e.textContent=msg;e.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>e.classList.remove('show'),1800)}
+function login(){const email=document.getElementById('email').value.trim(); if(!email){toast('Isi email atau nomor HP dulu');return}go('home')}
+function healthCheck(){let a=+age.value,h=+height.value,w=+weight.value;if(!a||!h||!w||h<80||w<20){toast('Isi umur, tinggi, dan berat dengan benar');return}let bmi=w/((h/100)**2),score=Math.max(40,Math.min(98,Math.round(92-Math.abs(bmi-21.5)*7)));document.getElementById('score').textContent=score;document.getElementById('bmiText').textContent='BMI: '+bmi.toFixed(1)+' — '+(bmi<18.5?'Berat badan kurang':bmi<25?'Normal':'Di atas rentang normal');document.getElementById('healthAdvice').textContent=score>=75?'Kondisi terlihat cukup baik. Tetap jaga tidur, makan, dan aktivitas fisik.':'Perhatikan pola makan, tidur, dan aktivitas; pertimbangkan konsultasi jika ada keluhan.';document.getElementById('healthResult').classList.add('show')}
+function renderDoctors(){let q=document.getElementById('searchDoctor').value.toLowerCase();document.getElementById('doctorList').innerHTML=doctors.filter(d=>(d.name+' '+d.spec).toLowerCase().includes(q)).map((d,i)=>`<div class="card row"><div class="logo" style="width:46px;height:46px;font-size:16px">${d.ava}</div><div class="grow"><b>${d.name}</b><p>${d.spec}</p><p class="green">★ 4.8 • ● Online</p></div><button class="btn" style="width:70px;height:34px;font-size:9px" onclick="openDoctor(${i})">Lihat</button></div>`).join('')}
+function filterDoctors(){renderDoctors()}
+function filterChip(el,s){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('searchDoctor').value=s;renderDoctors()}
+function openDoctor(i){const d=doctors[i];document.getElementById('docName').textContent=d.name;document.getElementById('docSpec').textContent=d.spec;document.getElementById('slots').innerHTML=['08:00','10:00','13:00','15:00'].map(x=>`<button class="chip" onclick="this.classList.toggle('active');toast('Slot '+x+' dipilih')">${x}</button>`).join('');go('doctor')}
+function renderHistory(){document.getElementById('historyList').innerHTML=[['♧','Cek Kesehatan','Hari ini • 72/100'],['♙','Konsultasi Dokter','8 Sep 2025 • dr. Siti'],['⌁','Obat','5 Sep 2025 • Paracetamol'],['▤','Catatan Kesehatan','1 Sep 2025 • Sakit kepala ringan']].map(x=>`<div class="card row"><div class="icon">${x[0]}</div><div><b>${x[1]}</b><p>${x[2]}</p></div></div>`).join('')}
+function renderMeds(){document.getElementById('meds').innerHTML=[['Paracetamol 500mg','08:00 • Setelah makan'],['Vitamin D','12:00 • Setelah makan'],['Multivitamin','18:00 • Setelah makan']].map(x=>`<div class="card row"><div class="icon">♧</div><div><b>${x[0]}</b><p>${x[1]}</p></div></div>`).join('')}
+function addReminder(){const name=prompt('Nama obat?');if(name){const e=document.createElement('div');e.className='card row';e.innerHTML=`<div class="icon">♧</div><div><b>${name}</b><p>Pengingat baru • 08:00</p></div>`;document.getElementById('meds').prepend(e);toast('Pengingat ditambahkan')}}
+function toggleDark(el){document.body.style.background=el.checked?'#dfe9e5':'#17201d';document.documentElement.style.setProperty('--bg',el.checked?'#F6FAF8':'#17201D');document.documentElement.style.setProperty('--text',el.checked?'#17201D':'#F6FAF8');toast(el.checked?'Mode terang':'Mode gelap')}
+document.querySelectorAll('.nav[data-go]').forEach(n=>n.addEventListener('click',()=>go(n.dataset.go)));
+document.getElementById('profileItems').innerHTML=[['♙','Data Pribadi'],['♡','Riwayat Kesehatan'],['⌁','Pengingat Obat'],['▣','Konsultasi Saya'],['⚙','Pengaturan']].map(x=>`<button class="card row" style="width:100%;border:0;text-align:left;cursor:pointer" onclick="go('${x[1]==='Pengaturan'?'settings':x[1]==='Pengingat Obat'?'reminder':x[1]==='Riwayat Kesehatan'?'history':'home'}')"><div class="icon">${x[0]}</div><div class="grow"><b>${x[1]}</b><p>Lihat dan kelola</p></div><span>›</span></button>`).join('');
+go('splash');
+</script>
+</body>
+</html>
